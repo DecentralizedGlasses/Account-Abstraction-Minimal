@@ -5,10 +5,13 @@ import {Test} from "lib/forge-std/src/Test.sol";
 import {ZkMinimalAccount} from "src/zkSync/ZkMinimalAccount.sol";
 import {ERC20Mock} from "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
 import {
-    Transaction, MemoryTransactionHelper
+    Transaction,
+    MemoryTransactionHelper
 } from "lib/foundry-era-contracts/src/system-contracts/contracts/libraries/MemoryTransactionHelper.sol";
 import {BOOTLOADER_FORMAL_ADDRESS} from "lib/foundry-era-contracts/src/system-contracts/contracts/Constants.sol";
-import {ACCOUNT_VALIDATION_SUCCESS_MAGIC} from "lib/foundry-era-contracts/src/system-contracts/contracts/interfaces/IAccount.sol";
+import {
+    ACCOUNT_VALIDATION_SUCCESS_MAGIC
+} from "lib/foundry-era-contracts/src/system-contracts/contracts/interfaces/IAccount.sol";
 import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
 contract ZkMinimalAccountTest is Test {
@@ -55,7 +58,8 @@ contract ZkMinimalAccountTest is Test {
         uint256 value = 0;
         bytes memory functionData = abi.encodeWithSelector(ERC20Mock.mint.selector, address(minimalAccount), AMOUNT);
 
-        Transaction memory transaction = _createUnsignedTransaction(minimalAccount.owner(), 113, dest, value, functionData);
+        Transaction memory transaction =
+            _createUnsignedTransaction(minimalAccount.owner(), 113, dest, value, functionData);
         transaction = _signTransaction(transaction);
 
         // Act
@@ -70,7 +74,7 @@ contract ZkMinimalAccountTest is Test {
                                 HELPERS
     //////////////////////////////////////////////////////////////*/
 
-    function _signTransaction(Transaction memory transaction) internal view returns(Transaction memory){
+    function _signTransaction(Transaction memory transaction) internal view returns (Transaction memory) {
         bytes32 unsignedTransactionHash = MemoryTransactionHelper.encodeHash(transaction); //encodeHash function encodes data based on different type of tx
         // bytes32 digest = unsignedTransactionHash.toEthSignedMessageHash();
         // we can do the below one using as same as in sendPackedUserOperation in Ethereum Minimal Account Test
