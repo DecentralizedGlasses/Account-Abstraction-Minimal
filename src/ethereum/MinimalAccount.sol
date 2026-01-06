@@ -52,7 +52,7 @@ contract MinimalAccount is IAccount, Ownable {
     /*//////////////////////////////////////////////////////////////
                            EXTERNAL FUNCTIONS
     //////////////////////////////////////////////////////////////*/
-    function execute(address dest, uint256 value, bytes calldata functionData) external {
+    function execute(address dest, uint256 value, bytes calldata functionData) external requireFromEntryPointOrOwner {
         (bool success, bytes memory result) = dest.call{value: value}(functionData);
         if (!success) {
             revert MinimalAccount__CallFailed(result);
@@ -95,6 +95,13 @@ contract MinimalAccount is IAccount, Ownable {
         }
         return SIG_VALIDATION_SUCCESS;
     }
+
+    // function _payPrefund(uint256 missingAccountFunds) internal {
+    //     if (missingAccountFunds != 0) {
+    //         (bool success,) = payable(msg.sender).call{value: missingAccountFunds, gas: type(uint256).max}("");
+    //         (success);
+    //     }
+    // }
 
     function _payPrefund(uint256 missingAccountFunds) internal {
         if (missingAccountFunds != 0) {
